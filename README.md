@@ -27,6 +27,7 @@ Args:
     `$ python train_word2vec.py test_data/test.txt test_data/test.model 2`
 
 or:
+
     `$ python train_word2vec.py test_data/test.txt test_data/test.model`
 
 
