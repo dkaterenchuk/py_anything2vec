@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 """
+#############################################################################
 MIT License
 
 Copyright (c) 2017 Denys Katerenchuk
@@ -22,11 +23,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+#############################################################################
 
 
 Given a set of cleaned/parsed text, this script trains a new word2vec model.
-The text data must be prepared by the user. It usually contains one sentence per line and each
-sentence consists of lower case words separated by space without any punctuation.
+The text data must be prepared by the user. It usually contains one sentence per
+line and each sentence consists of lower case words separated by space without any
+punctuation.
 
 Usage:
     python train_word2vec.py <doc_path.txt> <output_path.model> [n_number_of_dimensions]
@@ -91,7 +94,7 @@ def main(doc_path, output_path, dim=100):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3 or len(sys.argv != 4):
+    if len(sys.argv) != 3 and len(sys.argv) != 4:
         print __doc__
     else:
         if len(sys.argv) == 3:

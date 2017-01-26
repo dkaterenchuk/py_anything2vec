@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 """
+#############################################################################
 MIT License
 
 Copyright (c) 2017 Denys Katerenchuk
@@ -22,7 +23,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
+#############################################################################
 
 
 Train a doc2vec model from a given set of cleaned/parsed text. The text data must be prepared by the user.
@@ -50,29 +51,31 @@ from gensim.models.doc2vec import TaggedDocument, Doc2Vec
 
 class DataReader(object):
 
-    def __init__(self, reddit_path):
-        self.path = reddit_path
+    def __init__(self, doc_path):
+        self.path = doc_path
 
     def __iter__(self):
         """
-        Reads Reddit json archive (30GB) line by line
-        and calls parser on each comment.
+        Reads a large archive line by line without loading it into ram.
+        This approach is limited by the read speed and is designed to work with large files.
+
         :param reddit_path:
-        :return:
+        :return: iterator
         """
         uid = 0
         with open(self.path, "r") as f:
             for line in f:
                 uid += 1
-                yield TaggedDocument(words=line.strip("\n").split(" "), tags=uid)
+                yield TaggedDocument(words=line.strip("\n").split(" "), tags=["sent_"+str(uid)])
 
 
 def read_data(data_path):
     """
-    This function should be used on smalled datasents that can fit into memory, otherwise, use DataReader object.
+    Reads smaller data that can fit into RAM. It is much faster but should be used on smalled
+    datasets, otherwise, use DataReader object.
 
     :param data_path: path to text data
-    :return:
+    :return: sentences: - a list of sentences which are just lists of words
     """
     sentences = []
     with open(data_path, "r") as f:
@@ -82,22 +85,38 @@ def read_data(data_path):
     return sentences
 
 
-def train_model(vocab_path, data_path, trained_path, dim=10):
+def train_model(doc_path, model_path, dim=100):
+    """
+    Trains Doc2Vec model
+
+    :param doc_path: - str: path to a doc file
+    :param model_path: - str: paht to output_model_file
+    :param dim: - [optional] - number of dimentions
+    :return:
+    """
+    print "Initializing a model"
     model = Doc2Vec(size=dim, workers=8)
-#    vocab = DataReader(vocab_path)
-#    sentences = DataReader(data_path)
-    model.build_vocab(DataReader(data_path))
-    # gensim.models.Doc2Vec(sentences, size=dim, workers=8)  #.Word2Vec(sentences, size=dim, workers=8)
-    model.train(DataReader(data_path))
-    model.save(trained_path+"/test2vec_"+str(dim)+".model")
+
+    print "Building vocabulary..."
+    model.build_vocab(DataReader(doc_path))
+    print "Training the model..."
+    model.train(DataReader(doc_path))
+    print "Saving the model to %s" % model_path
+    model.save(model_path)
 
 
-def main(vocab_path, data_path, trained_path):
-    train_model(vocab_path, data_path, trained_path, 100)
+def main(doc_path, output_path, dim=100):
+    """
+    Main function
+    """
+    train_model(doc_path, output_path, dim)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3 and len(sys.argv) != 4:
         print __doc__
     else:
-        main(sys.argv[1], sys.argv[2], sys.argv[3])
+        if len(sys.argv) == 3:
+            main(sys.argv[1], sys.argv[2])
+        else:
+            main(sys.argv[1], sys.argv[2], sys.argv[3])
