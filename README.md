@@ -37,8 +37,10 @@ Download or clone the package and follow the usage instructions to run it.
 ### Dependencies
 Gensim - a python library to train word2vec (https://radimrehurek.com/gensim/)
 `pip install --upgrade gensim`
+
 SciPy - https://www.scipy.org/
 `pip install scipy`
+
 NumPy - http://www.numpy.org/
 `pip install numpy`
 
