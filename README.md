@@ -25,6 +25,7 @@ Args:
     
     n_number_of_dimentions - [optional] integer number to define the number of dimensions
 
+### Running
 
     `$ python train_word2vec.py test_data/test.txt test_data/test.model 2`
 
