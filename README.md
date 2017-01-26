@@ -20,7 +20,9 @@ Usage:
 
 Args:
     doc_path.txt - a path to a document in txt format that will be used to train word2vec
+    
     output_path.model - a path to save trained model
+    
     n_number_of_dimentions - [optional] integer number to define the number of dimensions
 
 
@@ -37,7 +39,7 @@ Download or clone the package and follow the usage instructions to run it.
 
 ### Dependencies
 Gensim - a python library to train word2vec (https://radimrehurek.com/gensim/)
-`pip install --upgrade gensim`
+`pip install gensim`
 
 SciPy - https://www.scipy.org/
 `pip install scipy`
